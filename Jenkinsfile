@@ -50,9 +50,6 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            when {
-                branch 'master'
-            }
             steps {
                 script {
                     kubernetesDeploy(
