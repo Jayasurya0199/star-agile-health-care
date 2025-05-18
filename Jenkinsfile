@@ -3,10 +3,8 @@ pipeline {
     
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
-        IMAGE_NAME = 'jayasurya0199/staragilefinancev1'
-        REPO_URL = 'https://github.com/Jayasurya0199/projectSA1.git'
-        ANSIBLE_PLAYBOOK = 'docker-setup.yml'
-        ANSIBLE_INVENTORY = 'inventory'
+        IMAGE_NAME = 'jayasurya0199/staragilehcarev1'
+        REPO_URL = 'https://github.com/Jayasurya0199/star-agile-health-care.git'
     }
 
     stages {
