@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hcare
-          image: jayasurya0199/staragilehcare:v1
+          image: jayasurya0199/staragilehcarev1:latest
           ports:
             - containerPort: 8082
           env:
