@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     kubernetesDeploy(
-                        configs: 'kubernetesfile.yaml',
+                        configs: 'kubernetesfile.yml',
                         kubeconfigId: env.KUBECONFIG_CREDENTIALS
                     )
                 }
