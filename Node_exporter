@@ -1,0 +1,101 @@
+1. Install & Run Node Exporter on Master & Worker
+Download & Extract
+On both the master and the node machines, SSH in and run:
+
+bash
+Copy
+Edit
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+tar xvf node_exporter-1.7.0.linux-amd64.tar.gz
+sudo mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin/
+Create a node_exporter Service
+Create /etc/systemd/system/node_exporter.service with:
+
+ini
+Copy
+Edit
+[Unit]
+Description=Prometheus Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=default.target
+Enable & Start
+
+bash
+Copy
+Edit
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter
+sudo systemctl status node_exporter   # verify it’s running
+By default it listens on port 9100.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. Configure Prometheus to Scrape Both Exporters
+Edit Prometheus’ config (on your Prometheus server, typically at /etc/prometheus/prometheus.yml):
+
+yaml
+Copy
+Edit
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'k8s-nodes'
+    static_configs:
+      - targets: ['MASTER_IP:9100','WORKER_IP:9100']
+Replace MASTER_IP and WORKER_IP with the actual node IPs.
+
+Reload Prometheus
+
+bash
+Copy
+Edit
+sudo systemctl reload prometheus
+or, if reload isn’t supported:
+
+bash
+Copy
+Edit
+sudo systemctl restart prometheus
+Verify in Prometheus
+
+Browse to http://<PROMETHEUS_IP>:9090/targets
+
+You should see two healthy targets under k8s-nodes.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. Add Prometheus as a Datasource in Grafana
+Log in to Grafana at http://<GRAFANA_IP>:3000 (default admin/admin).
+
+Add Data Source
+
+In the left menu, click Configuration → Data Sources → Add data source.
+
+Choose Prometheus.
+
+URL: http://<PROMETHEUS_IP>:9090
+
+Click Save & Test — you should see “Data source is working”.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. Import a Node Exporter Dashboard
+In Grafana, click Create → Import.
+
+Enter Dashboard ID 1860 (official Node Exporter Full) or 1861 (Node Exporter for Kubernetes).
+
+Click Load, select your Prometheus data source, then Import.
+
+You’ll now have detailed CPU, memory, filesystem, network, and more metrics for both nodes.
+
+Recap
+Node Exporter on each machine (9100).
+
+Prometheus scrape those exporters via prometheus.yml.
+
+Grafana uses Prometheus as a datasource and imports a Node Exporter dashboard.
