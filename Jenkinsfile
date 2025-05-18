@@ -5,6 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
         IMAGE_NAME = 'jayasurya0199/staragilehcarev1'
         REPO_URL = 'https://github.com/Jayasurya0199/star-agile-health-care.git'
+        KUBECONFIG_CREDENTIALS = 'k8sconfigpwd'
     }
 
     stages {
@@ -22,10 +23,10 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {  // Add a step for running tests
+        stage('Run Tests') {
             steps {
                 script {
-                    sh "mvn test"  // Run the tests using Maven
+                    sh "mvn test"
                 }
             }
         }
@@ -48,12 +49,16 @@ pipeline {
             }
         }
 
-        stage('Configure and Run Docker Locally'){
-        when{ expression {env.GIT_BRANCH == 'master'}}
-            steps{
-                script{
-                     kubernetesDeploy (configs: 'kubernetesfile.yaml' ,kubeconfigId: 'k8sconfigpwd')
-    
+        stage('Deploy to Kubernetes') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    kubernetesDeploy(
+                        configs: 'kubernetesfile.yaml',
+                        kubeconfigId: env.KUBECONFIG_CREDENTIALS
+                    )
                 }
             }
         }
