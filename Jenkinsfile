@@ -48,12 +48,12 @@ pipeline {
             }
         }
 
-        stage('Configure and Run Docker Locally') {
-            steps {
-                script {
-                    sh """
-                    ansible-playbook -i ${env.ANSIBLE_INVENTORY} ${env.ANSIBLE_PLAYBOOK}
-                    """
+        stage('Configure and Run Docker Locally'){
+        when{ expression {env.GIT_BRANCH == 'master'}}
+            steps{
+                script{
+                     kubernetesDeploy (configs: 'kubernetesfile.yaml' ,kubeconfigId: 'k8sconfigpwd')
+    
                 }
             }
         }
