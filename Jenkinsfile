@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
         IMAGE_NAME = 'jayasurya0199/staragilehcarev1'
         REPO_URL = 'https://github.com/Jayasurya0199/star-agile-health-care.git'
-        KUBECONFIG_CREDENTIALS = 'k8sconfigpwd'
+        KUBECONFIG_CREDENTIALS = 'k8configpwd'
     }
 
     stages {
