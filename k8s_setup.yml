@@ -17,7 +17,7 @@
 
     - name: Ensure .kube directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.kube"
+        path: "/home/{{ ansible_user }}/.kube"
         state: directory
         mode: '0755'
         owner: "{{ ansible_user }}"
@@ -25,14 +25,14 @@
 
     - name: Copy kubeconfig to target node
       copy:
-        src: /home/ansadmin/.kube/config
-        dest: "{{ ansible_env.HOME }}/.kube/config"
+        src: /home/ansadmin/.kube/config  # must exist on the controller!
+        dest: "/home/{{ ansible_user }}/.kube/config"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
         mode: '0600'
 
     - name: Apply Kubernetes manifest
       kubernetes.core.k8s:
-        kubeconfig: "{{ ansible_env.HOME }}/.kube/config"
+        kubeconfig: "/home/{{ ansible_user }}/.kube/config"
         state: present
         definition: "{{ lookup('file', 'kubernetesfile.yml') }}"
