@@ -1,8 +1,23 @@
 - name: Deploy Docker image to Kubernetes
   hosts: all
+  become: yes
   tasks:
+
+    - name: Ensure python3 and pip3 are installed
+      package:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Install kubernetes python client library
+      pip:
+        name: kubernetes
+        executable: pip3
+
     - name: Apply Kubernetes manifest
       kubernetes.core.k8s:
-        kubeconfig: ~/.kube/config
+        kubeconfig: "{{ ansible_env.HOME }}/.kube/config"
         state: present
         definition: "{{ lookup('file', 'kubernetesfile.yml') }}"
+
