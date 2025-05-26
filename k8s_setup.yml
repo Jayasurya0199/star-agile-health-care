@@ -25,7 +25,7 @@
 
     - name: Copy kubeconfig to target node
       copy:
-        src: /home/ansadmin/.kube/config  # must exist on the controller!
+        src: /tmp/kubeconfig  # must exist on the controller!
         dest: "/home/{{ ansible_user }}/.kube/config"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
