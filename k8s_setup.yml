@@ -1,0 +1,9 @@
+- name: Deploy Docker image to Kubernetes
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Apply Kubernetes manifest
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('file', 'kubernetesfile.yml') }}"
