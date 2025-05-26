@@ -1,6 +1,5 @@
 - name: Deploy Docker image to Kubernetes
-  hosts: localhost
-  gather_facts: false
+  hosts: all
   tasks:
     - name: Apply Kubernetes manifest
       kubernetes.core.k8s:
