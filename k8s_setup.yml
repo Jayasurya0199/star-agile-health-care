@@ -25,7 +25,7 @@
 
     - name: Copy kubeconfig to target node
       copy:
-        src: /path/to/kubeconfig/on/controller
+        src: /home/ansadmin/.kube/config
         dest: "{{ ansible_env.HOME }}/.kube/config"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
