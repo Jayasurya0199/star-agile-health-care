@@ -15,6 +15,22 @@
           - python3-kubernetes
         state: present
 
+    - name: Ensure .kube directory exists
+      file:
+        path: "{{ ansible_env.HOME }}/.kube"
+        state: directory
+        mode: '0755'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Copy kubeconfig to target node
+      copy:
+        src: /path/to/kubeconfig/on/controller
+        dest: "{{ ansible_env.HOME }}/.kube/config"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0600'
+
     - name: Apply Kubernetes manifest
       kubernetes.core.k8s:
         kubeconfig: "{{ ansible_env.HOME }}/.kube/config"
